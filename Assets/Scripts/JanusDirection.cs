@@ -13,14 +13,6 @@ public class JanusDirection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            CurrentMode = JanusColourMode.White;
-        }
-        else if(Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            CurrentMode = JanusColourMode.Black;
-        }
     }
 
     public JanusColourMode CurrentMode
