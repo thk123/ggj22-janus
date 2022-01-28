@@ -13,7 +13,6 @@ public class JanusModeResponder : MonoBehaviour
     public virtual void Start()
     {
         DirectionOwner = GameObject.FindObjectOfType<JanusDirection>() ?? throw new System.NullReferenceException();
-        Debug.Log(DirectionOwner);
     }
 
     // Update is called once per frame
