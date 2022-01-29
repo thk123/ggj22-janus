@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(JanusDirection))]
+    [RequireComponent(typeof(JanusDirection))]
 [RequireComponent(typeof(SpriteRenderer))]
 public class JanusDisplay : MonoBehaviour
 {
