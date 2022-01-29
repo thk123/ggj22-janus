@@ -89,7 +89,7 @@ public class JanusController : MonoBehaviour
             directionHandler.CurrentMode = newMode;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        if((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow)) && IsGrounded())
         {
             StartCoroutine(JumpRoutine());
         }
