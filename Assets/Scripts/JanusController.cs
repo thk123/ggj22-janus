@@ -37,8 +37,31 @@ public class JanusController : MonoBehaviour
 
     public void DoStep(JanusColourMode direction)
     {
-        directionHandler.CurrentMode = direction;
-        gridEntity.Translate(new Vector2Int(DirectionFromMode(direction), 0));
+        var moveDirection = new Vector2Int(DirectionFromMode(direction), 0);
+        var targetCell = gridEntity.CurrentPosition + moveDirection;
+        if(gridManager.IsCellInBounds(targetCell))
+        {
+            if(CanMoveIntoCell(gridManager.GetCellContents(targetCell)))
+            {
+                directionHandler.CurrentMode = direction;
+                gridEntity.CurrentPosition = targetCell;
+            }
+        }
+    }
+
+    private bool CanMoveIntoCell(GridEntity contents)
+    {
+        if(contents == null)
+            return true;
+
+        return CanMoveInToBlockCell(contents.GetComponent<Block>());
+    }
+
+    private bool CanMoveInToBlockCell(Block block)
+    {
+        if(block == null)
+            return true;
+        return !block.Visible;
     }
 
     static int DirectionFromMode(JanusColourMode mode)

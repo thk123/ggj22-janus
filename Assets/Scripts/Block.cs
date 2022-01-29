@@ -25,7 +25,7 @@ public class Block : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(janus.CurrentMode == Colour)
+        if(Visible)
         {
             Show();
         }
@@ -34,6 +34,8 @@ public class Block : MonoBehaviour
             Hide();
         }
     }
+
+    public bool Visible => janus.CurrentMode == Colour;
 
     private void Show()
     {

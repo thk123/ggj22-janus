@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -29,6 +30,17 @@ public class GridManager : MonoBehaviour
         float cellSize = Mathf.Min(maxCellWidth, maxCellHeight);
 
         return new Vector2(cellSize, cellSize);
+    }
+
+    public bool IsCellInBounds(Vector2Int cell)
+    {
+        return Mathf.Abs(cell.x) < GridExtents.x
+            && Mathf.Abs(cell.y) < GridExtents.y;
+    }
+
+    public GridEntity GetCellContents(Vector2Int cell)
+    {
+        return gridEntities.FirstOrDefault(e => e.CurrentPosition == cell);
     }
 
     
