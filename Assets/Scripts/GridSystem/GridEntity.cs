@@ -5,11 +5,21 @@ using UnityEngine;
 public class GridEntity : MonoBehaviour
 {
     private GridManager gridManager;
-    public Vector2Int CurrentPosition;
+    public Vector2Int StartPosition;
+    private Vector2Int currentPosition;
+    public Vector2Int CurrentPosition
+    {
+        get => currentPosition;
+        set
+        {
+            currentPosition = value;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
         gridManager = GameObject.FindObjectOfType<GridManager>();
+        currentPosition = StartPosition;
     }
 
     // Update is called once per frame
