@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    public Vector2Int GridSize;
+    public Vector2Int GridExtents;
     private GridEntity[] gridEntities;
     // Start is called before the first frame update
     void Start()
@@ -23,8 +23,8 @@ public class GridManager : MonoBehaviour
         float height = Camera.main.orthographicSize * 2;
         float width = height * Screen.width/ Screen.height; 
 
-        float maxCellWidth = width / (float)GridSize.x;
-        float maxCellHeight = height / (float)GridSize.y;
+        float maxCellWidth = width / ((float)GridExtents.x * 2);
+        float maxCellHeight = height / ((float)GridExtents.y * 2);
 
         float cellSize = Mathf.Min(maxCellWidth, maxCellHeight);
 
