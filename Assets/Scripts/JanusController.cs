@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(JanusDirection))]
 [RequireComponent(typeof(GridEntity))]
 public class JanusController : MonoBehaviour
 {
-    public float BlockSize = 32.0f;
-
     private JanusDirection directionHandler;
     private GridEntity gridEntity;
     private GridManager gridManager;
 
-    private bool flightInMotion;
+
+    Vector2Int movementForce;
+    Vector2Int lastAppliedForce;
+
+
+    public int JumpHeight = 2;
 
 
     // Start is called before the first frame update
@@ -21,55 +25,101 @@ public class JanusController : MonoBehaviour
         directionHandler = GetComponent<JanusDirection>();
         gridEntity = GetComponent<GridEntity>();
         gridManager = GameObject.FindObjectOfType<GridManager>();
-        flightInMotion = false;
+        movementForce = Vector2Int.zero;
+        lastAppliedForce = Vector2Int.zero;
+        StartCoroutine(MoveLoop());
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        {
+            movementForce = new Vector2Int(movementForce.x, JumpHeight);
+        }
+
+        if(!IsGrounded() && movementForce.y == 0)
+        {
+            bool isGrounded = IsGrounded();
+            movementForce = new Vector2Int(movementForce.x, -1);
+        }
         
-        if(!flightInMotion)
+        bool leftPressed = Input.GetKey(KeyCode.LeftArrow);
+        bool rightPressed = Input.GetKey(KeyCode.RightArrow);
+        if(leftPressed && !rightPressed)
         {
-            UpdateFalling();
-            if(Input.GetKeyDown(KeyCode.LeftArrow))
+            movementForce = new Vector2Int(-1, movementForce.y);
+        }
+        else if(!leftPressed && rightPressed)
+        {
+            movementForce = new Vector2Int(1, movementForce.y);
+        }
+        else if(lastAppliedForce.x != 0)
+        {
+            movementForce = new Vector2Int(0, movementForce.y);
+        }
+    }
+
+    IEnumerator MoveLoop()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(0.25f);
+            DoOneStep();
+        }
+    }
+
+    void DoOneStep()
+    {
+        var moveDirection = DirectionFromForce(movementForce);
+        var newTarget = gridEntity.CurrentPosition + moveDirection;
+        if(CanMoveIntoCell(newTarget))
+        {
+            gridEntity.CurrentPosition = newTarget;
+
+            if(moveDirection.x > 0)
             {
-                DoStep(JanusColourMode.White);
-                
+                directionHandler.CurrentMode = JanusColourMode.Black;   
             }
-            else if(Input.GetKeyDown(KeyCode.RightArrow))
+            else if(moveDirection.x < 0)
             {
-                DoStep(JanusColourMode.Black);
+                directionHandler.CurrentMode = JanusColourMode.White;   
             }
         }
+        lastAppliedForce = moveDirection;
+        movementForce = DecreaseMovementByOne(movementForce);
     }
 
-    private void UpdateFalling()
+    private static Vector2Int DirectionFromForce(Vector2Int movementForce)
     {
-        var targetCell = gridEntity.CurrentPosition + new Vector2Int(0, -1);
-        if(CanMoveIntoCell(targetCell))
-        {
-            StartCoroutine(FallingRoutine(targetCell));
-            flightInMotion = true;
-        }
+        return new Vector2Int(UnitLength(movementForce.x), UnitLength(movementForce.y));
     }
 
-    IEnumerator FallingRoutine(Vector2Int fallTo)
+    private static int UnitLength(int val)
     {
-        gridEntity.CurrentPosition = fallTo;
-        yield return new WaitForSeconds(0.5f);
-        flightInMotion = false;
+        if(val > 0)
+            return 1;
+        else if (val < 0)
+            return -1;
+        else
+            return 0;
     }
 
-    public void DoStep(JanusColourMode direction)
+    private static Vector2Int DecreaseMovementByOne(Vector2Int movementForce)
     {
-        var moveDirection = new Vector2Int(DirectionFromMode(direction), 0);
-        var targetCell = gridEntity.CurrentPosition + moveDirection;
-        if(CanMoveIntoCell(targetCell))
-        {
-            directionHandler.CurrentMode = direction;
-            gridEntity.CurrentPosition = targetCell;
-        }
+        return new Vector2Int(TendTowardZero(movementForce.x), TendTowardZero(movementForce.y));
     }
+
+    private static int TendTowardZero(int value)
+    {
+        if(value > 0)
+            return value - 1;
+        else if(value < 0)
+            return value + 1;
+        return 0;
+    }
+
+    
 
     private bool CanMoveIntoCell(Vector2Int targetCell)
     {
@@ -84,6 +134,12 @@ public class JanusController : MonoBehaviour
             return true;
 
         return CanMoveInToBlockCell(contents.GetComponent<Block>());
+    }
+
+    private bool IsGrounded()
+    {
+        var groundCell = gridEntity.CurrentPosition + new Vector2Int(0, -1);
+        return !CanMoveIntoCell(groundCell);
     }
 
     private bool CanMoveInToBlockCell(Block block)
