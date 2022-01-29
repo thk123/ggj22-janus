@@ -373,24 +373,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &868052799 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6831178906259650677, guid: 257466012fc6adfc6b018b4cf0bb2e66, type: 3}
-  m_PrefabInstance: {fileID: 6831178907686631545}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &868052805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 868052799}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e67d96902a8519548a340aecca2f20e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StartGridPos: {x: 0, y: 0}
 --- !u!1 &1158677488
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,6 +661,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5656124001003018027, guid: fe20060cd0b6995b4abf8a8384023970, type: 3}
+      propertyPath: CurrentPosition.x
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe20060cd0b6995b4abf8a8384023970, type: 3}
 --- !u!1001 &6831178907686631545
@@ -695,18 +681,6 @@ PrefabInstance:
     - target: {fileID: 6831178906259650679, guid: 257466012fc6adfc6b018b4cf0bb2e66, type: 3}
       propertyPath: m_RootOrder
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6831178906259650679, guid: 257466012fc6adfc6b018b4cf0bb2e66, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6831178906259650679, guid: 257466012fc6adfc6b018b4cf0bb2e66, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6831178906259650679, guid: 257466012fc6adfc6b018b4cf0bb2e66, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6831178906259650679, guid: 257466012fc6adfc6b018b4cf0bb2e66, type: 3}
       propertyPath: m_LocalPosition.x
@@ -760,6 +734,10 @@ PrefabInstance:
     - target: {fileID: 5886355857608045333, guid: 807a005feadfc41758d3f5e1acb084c6, type: 3}
       propertyPath: StartGridPos.x
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5886355857608045333, guid: 807a005feadfc41758d3f5e1acb084c6, type: 3}
+      propertyPath: CurrentPosition.x
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 5886847832125389563, guid: 807a005feadfc41758d3f5e1acb084c6, type: 3}
       propertyPath: m_RootOrder

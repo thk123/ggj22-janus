@@ -3,16 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(JanusDirection))]
+[RequireComponent(typeof(GridEntity))]
 public class JanusController : MonoBehaviour
 {
     public float BlockSize = 32.0f;
 
     private JanusDirection directionHandler;
+    private GridEntity gridEntity;
+    private GridManager gridManager;
+
 
     // Start is called before the first frame update
     void Start()
     {
         directionHandler = GetComponent<JanusDirection>();
+        gridEntity = GetComponent<GridEntity>();
+        gridManager = GameObject.FindObjectOfType<GridManager>();
     }
 
     // Update is called once per frame
@@ -32,11 +38,11 @@ public class JanusController : MonoBehaviour
     public void DoStep(JanusColourMode direction)
     {
         directionHandler.CurrentMode = direction;
-        transform.Translate(new Vector3(DirectionFromMode(direction) * BlockSize, 0.0f, 0.0f));
+        gridEntity.Translate(new Vector2Int(DirectionFromMode(direction), 0));
     }
 
-    static float DirectionFromMode(JanusColourMode mode)
+    static int DirectionFromMode(JanusColourMode mode)
     {
-        return mode == JanusColourMode.White ? -1.0f : 1.0f;
+        return mode == JanusColourMode.White ? -1 : 1;
     }
 }

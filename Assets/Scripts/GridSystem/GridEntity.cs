@@ -5,11 +5,10 @@ using UnityEngine;
 public class GridEntity : MonoBehaviour
 {
     private GridManager gridManager;
-    public Vector2Int StartGridPos;
+    public Vector2Int CurrentPosition;
     // Start is called before the first frame update
     void Start()
     {
-        CurrentPos = StartGridPos;   
         gridManager = GameObject.FindObjectOfType<GridManager>();
     }
 
@@ -18,11 +17,11 @@ public class GridEntity : MonoBehaviour
     {
         var cellSize = gridManager.GetGridCellSize();
         transform.localScale = new Vector3(cellSize.x, cellSize.y, 1.0f);
-        transform.position = new Vector3(cellSize.x * StartGridPos.x, cellSize.y * StartGridPos.y, 0.0f);
+        transform.localPosition = new Vector3(cellSize.x * CurrentPosition.x, cellSize.y * CurrentPosition.y, 0.0f);
     }
 
-    public Vector2Int CurrentPos
+    public void Translate(Vector2Int offset)
     {
-        get; private set;
+        CurrentPosition = CurrentPosition + offset;
     }
 }
