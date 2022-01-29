@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -920542940015355464, guid: fe20060cd0b6995b4abf8a8384023970, type: 3}
+      propertyPath: Colour
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5655491239613587138, guid: fe20060cd0b6995b4abf8a8384023970, type: 3}
       propertyPath: m_Name
       value: BlackSquare Variant

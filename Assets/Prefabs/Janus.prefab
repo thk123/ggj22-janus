@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 184d7a482e01b3973b0b1b06cc5a100a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JumpHeight: 2
+  JumpHeight: 3
   moveTimeDelay: 0.25
 --- !u!114 &2967256195228794152
 MonoBehaviour:
@@ -123,4 +123,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e67d96902a8519548a340aecca2f20e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentPosition: {x: 0, y: 0}
+  StartPosition: {x: 0, y: 0}
