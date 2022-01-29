@@ -23,7 +23,12 @@ public class GridManager : MonoBehaviour
         float height = Camera.main.orthographicSize * 2;
         float width = height * Screen.width/ Screen.height; 
 
-        return new Vector2(width / (float)GridSize.x, height / (float)GridSize.y);
+        float maxCellWidth = width / (float)GridSize.x;
+        float maxCellHeight = height / (float)GridSize.y;
+
+        float cellSize = Mathf.Min(maxCellWidth, maxCellHeight);
+
+        return new Vector2(cellSize, cellSize);
     }
 
     
