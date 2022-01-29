@@ -166,6 +166,6 @@ public class JanusController : MonoBehaviour
     {
         if(block == null)
             return true;
-        return !block.Visible;
+        return !(block.GetComponent<DirectionVisibility>()?.Visible ?? true);
     }
 }

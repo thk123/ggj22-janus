@@ -10,8 +10,6 @@ public class Key : MonoBehaviour
     private GridManager gridManager;
     private Door doorToUnlock;
     private bool pickedUp;
-
-    public JanusColourMode Colour;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,12 +31,17 @@ public class Key : MonoBehaviour
                 .Where(x => x != null)
                 .SingleOrDefault();
         
-        if(overlappingController != null && overlappingController.CurrentMode == Colour)
+        if(overlappingController != null && IsVisible())
         {
             var keyPosition = doorToUnlock.GetComponent<GridEntity>().CurrentPosition + new Vector2Int(0, 1);
             gridEntity.CurrentPosition = keyPosition;
             doorToUnlock.Unlock();
             pickedUp = true;
         }
+    }
+
+    public bool IsVisible()
+    {
+        return GetComponent<DirectionVisibility>()?.Visible ?? true;
     }
 }
