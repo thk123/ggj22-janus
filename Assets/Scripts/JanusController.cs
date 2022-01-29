@@ -1,23 +1,55 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(JanusDirection))]
-[RequireComponent(typeof(GridEntity))]
+
+class Cooldown
+{
+    float timeRemaining;
+    float cooldownLength;
+    KeyCode key;
+
+    public bool IsTriggered
+    {
+        get; private set;
+    }
+    public Cooldown(float time, KeyCode key)
+    {
+        timeRemaining = 0.0f;
+        cooldownLength = time;
+        this.key = key;
+    }
+
+    public void Update()
+    {
+        IsTriggered = false;
+        if(timeRemaining > 0.0f)
+        {
+            timeRemaining -= Time.deltaTime;
+        }
+        if(timeRemaining <= 0.0f)
+        {
+            if(Input.GetKey(key))
+            {
+                IsTriggered = true;
+                timeRemaining = cooldownLength;
+            }
+        }
+    }
+}
 public class JanusController : MonoBehaviour
 {
+    public int JumpHeight;
+    public float moveTimeDelay = 0.25f;
+
     private JanusDirection directionHandler;
     private GridEntity gridEntity;
     private GridManager gridManager;
 
+    private Cooldown LeftCooldown;
+    private Cooldown RightCooldown;
 
-    Vector2Int movementForce;
-    Vector2Int lastAppliedForce;
-
-
-    public int JumpHeight = 2;
-
+    private bool currentlyJumping;
 
     // Start is called before the first frame update
     void Start()
@@ -25,101 +57,83 @@ public class JanusController : MonoBehaviour
         directionHandler = GetComponent<JanusDirection>();
         gridEntity = GetComponent<GridEntity>();
         gridManager = GameObject.FindObjectOfType<GridManager>();
-        movementForce = Vector2Int.zero;
-        lastAppliedForce = Vector2Int.zero;
-        StartCoroutine(MoveLoop());
+
+        LeftCooldown = new Cooldown(moveTimeDelay, KeyCode.LeftArrow);
+        RightCooldown = new Cooldown(moveTimeDelay, KeyCode.RightArrow);
+        currentlyJumping = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        LeftCooldown.Update();
+        RightCooldown.Update();
+
+        var newPos = gridEntity.CurrentPosition;
+        JanusColourMode newMode = directionHandler.CurrentMode;
+        if(LeftCooldown.IsTriggered && !RightCooldown.IsTriggered)
+        {
+            newPos = newPos + new Vector2Int(-1, 0);
+            newMode = JanusColourMode.White;
+        }
+        else if(!LeftCooldown.IsTriggered && RightCooldown.IsTriggered)
+        {
+            newPos = newPos + new Vector2Int(1, 0);
+            newMode = JanusColourMode.Black;
+        }
+
+        if(CanMoveIntoCell(newPos))
+        {
+            gridEntity.CurrentPosition = newPos;
+            directionHandler.CurrentMode = newMode;
+        }
+
         if(Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
-            movementForce = new Vector2Int(movementForce.x, JumpHeight);
+            StartCoroutine(JumpRoutine());
         }
 
-        if(!IsGrounded() && movementForce.y == 0)
+        if(!currentlyJumping && !IsGrounded())
         {
-            bool isGrounded = IsGrounded();
-            movementForce = new Vector2Int(movementForce.x, -1);
-        }
-        
-        bool leftPressed = Input.GetKey(KeyCode.LeftArrow);
-        bool rightPressed = Input.GetKey(KeyCode.RightArrow);
-        if(leftPressed && !rightPressed)
-        {
-            movementForce = new Vector2Int(-1, movementForce.y);
-        }
-        else if(!leftPressed && rightPressed)
-        {
-            movementForce = new Vector2Int(1, movementForce.y);
-        }
-        else if(lastAppliedForce.x != 0)
-        {
-            movementForce = new Vector2Int(0, movementForce.y);
+            StartCoroutine(FallRoutine());
         }
     }
 
-    IEnumerator MoveLoop()
+    IEnumerator JumpRoutine()
     {
-        while(true)
+        currentlyJumping = true;
+        int remainingJumpStrength = JumpHeight;
+        while(remainingJumpStrength > 0)
         {
-            yield return new WaitForSeconds(0.25f);
-            DoOneStep();
-        }
-    }
-
-    void DoOneStep()
-    {
-        var moveDirection = DirectionFromForce(movementForce);
-        var newTarget = gridEntity.CurrentPosition + moveDirection;
-        if(CanMoveIntoCell(newTarget))
-        {
-            gridEntity.CurrentPosition = newTarget;
-
-            if(moveDirection.x > 0)
+            var newPos = gridEntity.CurrentPosition + new Vector2Int(0, 1);
+            if(CanMoveIntoCell(newPos))
             {
-                directionHandler.CurrentMode = JanusColourMode.Black;   
+                gridEntity.CurrentPosition = newPos;
+                remainingJumpStrength -= 1;
             }
-            else if(moveDirection.x < 0)
+            else
             {
-                directionHandler.CurrentMode = JanusColourMode.White;   
+                remainingJumpStrength = 0;
             }
+
+            yield return new WaitForSeconds(moveTimeDelay);
         }
-        lastAppliedForce = moveDirection;
-        movementForce = DecreaseMovementByOne(movementForce);
+        currentlyJumping = false;
     }
 
-    private static Vector2Int DirectionFromForce(Vector2Int movementForce)
+    IEnumerator FallRoutine()
     {
-        return new Vector2Int(UnitLength(movementForce.x), UnitLength(movementForce.y));
+        currentlyJumping = true;
+        while(!IsGrounded())
+        {
+            var newPos = gridEntity.CurrentPosition + new Vector2Int(0, -1);
+            Debug.Assert(CanMoveIntoCell(newPos));
+            gridEntity.CurrentPosition = newPos;
+            yield return new WaitForSeconds(moveTimeDelay);
+        }
+        currentlyJumping = false;
     }
 
-    private static int UnitLength(int val)
-    {
-        if(val > 0)
-            return 1;
-        else if (val < 0)
-            return -1;
-        else
-            return 0;
-    }
-
-    private static Vector2Int DecreaseMovementByOne(Vector2Int movementForce)
-    {
-        return new Vector2Int(TendTowardZero(movementForce.x), TendTowardZero(movementForce.y));
-    }
-
-    private static int TendTowardZero(int value)
-    {
-        if(value > 0)
-            return value - 1;
-        else if(value < 0)
-            return value + 1;
-        return 0;
-    }
-
-    
 
     private bool CanMoveIntoCell(Vector2Int targetCell)
     {
@@ -147,10 +161,5 @@ public class JanusController : MonoBehaviour
         if(block == null)
             return true;
         return !block.Visible;
-    }
-
-    static int DirectionFromMode(JanusColourMode mode)
-    {
-        return mode == JanusColourMode.White ? -1 : 1;
     }
 }
