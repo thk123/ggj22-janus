@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -144,10 +145,15 @@ public class JanusController : MonoBehaviour
 
         var contents = gridManager.GetCellContents(targetCell);
 
+        return contents.All(CanMoveOnto);
+    }
+
+    private bool CanMoveOnto(GridEntity contents)
+    {
         if(contents == null)
             return true;
 
-        return CanMoveInToBlockCell(contents.GetComponent<Block>());
+        return CanMoveInToBlockCell(contents.GetComponent<Block>());   
     }
 
     private bool IsGrounded()

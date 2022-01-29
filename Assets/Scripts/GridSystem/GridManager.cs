@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using System.Linq;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
     public Vector2Int GridExtents;
+    public string NextLevel;
     private GridEntity[] gridEntities;
     // Start is called before the first frame update
     void Start()
@@ -38,10 +40,16 @@ public class GridManager : MonoBehaviour
             && Mathf.Abs(cell.y) < GridExtents.y;
     }
 
-    public GridEntity GetCellContents(Vector2Int cell)
+    public IEnumerable<GridEntity> GetCellContents(Vector2Int cell)
     {
-        return gridEntities.FirstOrDefault(e => e.CurrentPosition == cell);
+        return gridEntities.Where(e => e.CurrentPosition == cell);
     }
 
-    
+    public void CompleteLevel()
+    {
+        if(NextLevel != null)
+        {
+            SceneManager.LoadScene(NextLevel);
+        }
+    }
 }
