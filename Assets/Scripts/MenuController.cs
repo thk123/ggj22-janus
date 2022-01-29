@@ -21,4 +21,9 @@ public class MenuController : MonoBehaviour
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(LevelName);
     }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
 }
