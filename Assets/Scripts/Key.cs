@@ -33,12 +33,31 @@ public class Key : MonoBehaviour
         
         if(overlappingController != null && IsVisible())
         {
-            var keyPosition = doorToUnlock.GetComponent<GridEntity>().StartPosition + new Vector2Int(0, 1);
-            gridEntity.StartPosition = keyPosition;
-            doorToUnlock.Unlock();
+            //var keyPosition = doorToUnlock.GetComponent<GridEntity>().StartPosition + new Vector2Int(0, 1);
+            //gridEntity.StartPosition = keyPosition;
+            gridEntity.enabled = false;
+            StartCoroutine(SlideToDoor());
+            
             pickedUp = true;
         }
     }
+
+    IEnumerator SlideToDoor()
+    {
+        float t = 0;
+        Vector3 startPos = transform.position;
+        var curve = AnimationCurve.EaseInOut(0, 0, 1.0f, 1.0f);
+        while(distanceToDoor() > float.Epsilon * float.Epsilon)
+        {
+            float pos = curve.Evaluate(t);
+            transform.position = Vector3.Lerp(startPos, doorToUnlock.transform.GetChild(0).position, pos);
+            t += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        doorToUnlock.Unlock();
+    }
+
+    float distanceToDoor() =>(transform.position - doorToUnlock.transform.position).sqrMagnitude;
 
     public bool IsVisible()
     {
