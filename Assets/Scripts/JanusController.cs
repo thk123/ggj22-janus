@@ -122,7 +122,7 @@ public class JanusController : MonoBehaviour
             }
             else
             {
-                remainingJumpStrength = 0;
+                remainingJumpStrength -= 1;
             }
 
             yield return new WaitForSeconds(moveTimeDelay);
