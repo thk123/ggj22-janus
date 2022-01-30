@@ -354,7 +354,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2534768958897745239, guid: 8f1a88a748603115a9e83183d9a94690, type: 3}
       propertyPath: CurrentMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2534768958984909607, guid: 8f1a88a748603115a9e83183d9a94690, type: 3}
       propertyPath: StartPosition.x
