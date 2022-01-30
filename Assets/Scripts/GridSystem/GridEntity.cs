@@ -12,6 +12,10 @@ public class GridEntity : MonoBehaviour
     void Start()
     {
         gridManager = GameObject.FindObjectOfType<GridManager>();
+        if(!gridManager.IsCellInBounds(StartPosition))
+        {
+            Debug.LogError($"Object {name} is out of bounds: {StartPosition}, grid extents: {gridManager.GridExtents}");
+        }
     }
 
     // Update is called once per frame
