@@ -130,6 +130,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2297032919285500185, guid: 8f1a88a748603115a9e83183d9a94690, type: 3}
+      propertyPath: UnlockedDoorImage
+      value: 
+      objectReference: {fileID: 21300000, guid: c155126d42bd74eeda0025ba756d4939, type: 3}
     - target: {fileID: 2534768958015764732, guid: 8f1a88a748603115a9e83183d9a94690, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -186,6 +190,10 @@ PrefabInstance:
       propertyPath: GridExtents.x
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 2534768958015764735, guid: 8f1a88a748603115a9e83183d9a94690, type: 3}
+      propertyPath: GridExtents.y
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 2534768958897745236, guid: 8f1a88a748603115a9e83183d9a94690, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.25
@@ -197,6 +205,10 @@ PrefabInstance:
     - target: {fileID: 2534768958897745236, guid: 8f1a88a748603115a9e83183d9a94690, type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534768958984909607, guid: 8f1a88a748603115a9e83183d9a94690, type: 3}
+      propertyPath: StartPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2534768958984909607, guid: 8f1a88a748603115a9e83183d9a94690, type: 3}
       propertyPath: StartPosition.y
