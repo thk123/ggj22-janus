@@ -2,24 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class GridEntity : MonoBehaviour
 {
     private GridManager gridManager;
     public Vector2Int StartPosition;
-    private Vector2Int currentPosition;
-    public Vector2Int CurrentPosition
-    {
-        get => currentPosition;
-        set
-        {
-            currentPosition = value;
-        }
-    }
+
     // Start is called before the first frame update
     void Start()
     {
         gridManager = GameObject.FindObjectOfType<GridManager>();
-        currentPosition = StartPosition;
     }
 
     // Update is called once per frame
@@ -27,11 +19,6 @@ public class GridEntity : MonoBehaviour
     {
         var cellSize = gridManager.GetGridCellSize();
         transform.localScale = new Vector3(cellSize.x, cellSize.y, 1.0f);
-        transform.localPosition = new Vector3(cellSize.x * CurrentPosition.x, cellSize.y * CurrentPosition.y, 0.0f);
-    }
-
-    public void Translate(Vector2Int offset)
-    {
-        CurrentPosition = CurrentPosition + offset;
+        transform.localPosition = new Vector3(cellSize.x * StartPosition.x, cellSize.y * StartPosition.y, 0.0f);
     }
 }

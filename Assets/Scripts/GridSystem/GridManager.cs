@@ -42,7 +42,7 @@ public class GridManager : MonoBehaviour
 
     public IEnumerable<GridEntity> GetCellContents(Vector2Int cell)
     {
-        return gridEntities.Where(e => e.CurrentPosition == cell);
+        return gridEntities.Where(e => e.StartPosition == cell);
     }
 
     public void CompleteLevel()

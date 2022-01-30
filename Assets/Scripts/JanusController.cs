@@ -70,7 +70,7 @@ public class JanusController : MonoBehaviour
         LeftCooldown.Update();
         RightCooldown.Update();
 
-        var newPos = gridEntity.CurrentPosition;
+        var newPos = gridEntity.StartPosition;
         JanusColourMode newMode = directionHandler.CurrentMode;
         if(LeftCooldown.IsTriggered && !RightCooldown.IsTriggered)
         {
@@ -85,7 +85,7 @@ public class JanusController : MonoBehaviour
 
         if(CanMoveIntoCell(newPos))
         {
-            gridEntity.CurrentPosition = newPos;
+            gridEntity.StartPosition = newPos;
             directionHandler.CurrentMode = newMode;
         }
 
@@ -106,11 +106,19 @@ public class JanusController : MonoBehaviour
         int remainingJumpStrength = JumpHeight;
         while(remainingJumpStrength > 0)
         {
-            var newPos = gridEntity.CurrentPosition + new Vector2Int(0, 1);
+            var newPos = gridEntity.StartPosition + new Vector2Int(0, 1);
             if(CanMoveIntoCell(newPos))
             {
-                gridEntity.CurrentPosition = newPos;
-                remainingJumpStrength -= 1;
+                gridEntity.StartPosition = newPos;
+                
+                if(IsGrounded())
+                {
+                    remainingJumpStrength = 0;
+                }
+                else
+                {
+                    remainingJumpStrength -= 1;
+                }
             }
             else
             {
@@ -127,9 +135,9 @@ public class JanusController : MonoBehaviour
         currentlyJumping = true;
         while(!IsGrounded())
         {
-            var newPos = gridEntity.CurrentPosition + new Vector2Int(0, -1);
+            var newPos = gridEntity.StartPosition + new Vector2Int(0, -1);
             Debug.Assert(CanMoveIntoCell(newPos));
-            gridEntity.CurrentPosition = newPos;
+            gridEntity.StartPosition = newPos;
             yield return new WaitForSeconds(moveTimeDelay);
         }
         currentlyJumping = false;
@@ -158,7 +166,7 @@ public class JanusController : MonoBehaviour
 
     private bool IsGrounded()
     {
-        var groundCell = gridEntity.CurrentPosition + new Vector2Int(0, -1);
+        var groundCell = gridEntity.StartPosition + new Vector2Int(0, -1);
         return !CanMoveIntoCell(groundCell);
     }
 

@@ -23,7 +23,7 @@ public class Door : MonoBehaviour
         if(!isLocked)
         {
             var overlappingController =
-            gridManager.GetCellContents(gridEntity.CurrentPosition)
+            gridManager.GetCellContents(gridEntity.StartPosition)
                 .Select(c => c.GetComponent<JanusController>())
                 .Where(x => x != null)
                 .SingleOrDefault();

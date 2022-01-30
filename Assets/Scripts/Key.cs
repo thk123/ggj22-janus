@@ -26,15 +26,15 @@ public class Key : MonoBehaviour
             return;
 
         var overlappingController =
-            gridManager.GetCellContents(gridEntity.CurrentPosition)
+            gridManager.GetCellContents(gridEntity.StartPosition)
                 .Select(c => c.GetComponent<JanusDirection>())
                 .Where(x => x != null)
                 .SingleOrDefault();
         
         if(overlappingController != null && IsVisible())
         {
-            var keyPosition = doorToUnlock.GetComponent<GridEntity>().CurrentPosition + new Vector2Int(0, 1);
-            gridEntity.CurrentPosition = keyPosition;
+            var keyPosition = doorToUnlock.GetComponent<GridEntity>().StartPosition + new Vector2Int(0, 1);
+            gridEntity.StartPosition = keyPosition;
             doorToUnlock.Unlock();
             pickedUp = true;
         }
