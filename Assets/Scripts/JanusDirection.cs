@@ -15,8 +15,5 @@ public class JanusDirection : MonoBehaviour
     {
     }
 
-    public JanusColourMode CurrentMode
-    {
-        get;set;
-    }
+    public JanusColourMode CurrentMode;
 }
