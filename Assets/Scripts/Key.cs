@@ -54,7 +54,7 @@ public class Key : MonoBehaviour
         float t = 0;
         Vector3 startPos = transform.position;
         var curve = AnimationCurve.EaseInOut(0.0f, 0.0f, MoveDuration, 1.0f);
-        while(distanceToDoor() > float.Epsilon * float.Epsilon)
+        while(t < MoveDuration)
         {
             float pos = curve.Evaluate(t);
             transform.position = Vector3.Lerp(startPos, doorToUnlock.GetCentre(), pos);
